@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+license="MIT"
+
+[[mods]]
+modId="entityaccessors"
+version="1.0"
+displayName="Entity Accessors"
+issueTrackerURL=""
+displayURL=""
+logoFile=""
+credits=""
+authors="AreUThreateningMe"
+description='''
+Access Entity slots
+'''
+[[dependencies.entityaccessors]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.entityaccessors]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="AFTER"
+    side="BOTH"
