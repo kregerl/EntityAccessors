@@ -67,21 +67,13 @@ public abstract class AbstractAccessorTileEntity extends LockableLootTileEntity
 
 	@Override
 	public void tick() {
-//		LivingEntity livingEntity = getEntityAbove(this.pos, this.world);
-//		if (livingEntity != null && this.selectedEntity != null && !this.selectedEntity.isEntityEqual(livingEntity)) {
-//			this.selectedEntity = livingEntity;
-//		} else if (this.selectedEntity == null && livingEntity != null) {
-//			this.selectedEntity = livingEntity;
-//		} else {
-//			this.selectedEntity = null;
-//		}
 
 		if (this.changed && player != null) {
 			LivingEntity entity = getEntityAbove(this.pos, this.world);
 			// Create a new packet to simply update the entities view image, not change the
 			// items in the inventory of the tile. this is causing a dupe bug.
 			Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) this.player),
-					new RequestEntityPacket(entity, this.pos));
+					new RequestEntityPacket(entity, this.pos, false));
 			this.selectedEntity = entity;
 			this.changed = false;
 		}

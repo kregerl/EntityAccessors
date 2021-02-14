@@ -30,6 +30,7 @@ public class RequestEntityPacket {
 	private Map<EquipmentSlotType, ItemStack> equipment;
 	private LivingEntity entity;
 	private BlockPos pos;
+	private boolean shouldRespond;
 
 	public RequestEntityPacket(PacketBuffer buffer) {
 		// Read entity NBT tag
@@ -48,6 +49,7 @@ public class RequestEntityPacket {
 			this.equipment.put(type, stack);
 		}
 		this.pos = buffer.readBlockPos();
+		this.shouldRespond = buffer.readBoolean();
 
 		// Recreate a new entity from the entity type
 		Optional<EntityType<?>> entityType = EntityType.readEntityType(nbt);
@@ -59,9 +61,10 @@ public class RequestEntityPacket {
 		}
 	}
 
-	public RequestEntityPacket(LivingEntity entity, BlockPos pos) {
+	public RequestEntityPacket(LivingEntity entity, BlockPos pos, boolean shouldRespond) {
 		this.entity = entity;
 		this.pos = pos;
+		this.shouldRespond = shouldRespond;
 		this.equipment = new LinkedHashMap<EquipmentSlotType, ItemStack>();
 		if (this.entity != null) {
 			this.equipment.put(EquipmentSlotType.MAINHAND, this.entity.getHeldItemMainhand());
@@ -105,6 +108,7 @@ public class RequestEntityPacket {
 				buffer.writeCompoundTag(nbt);
 			}
 			buffer.writeBlockPos(this.pos);
+			buffer.writeBoolean(this.shouldRespond);
 		} else {
 			CompoundNBT nbt = new CompoundNBT();
 			nbt.putString("id", "");
@@ -127,13 +131,15 @@ public class RequestEntityPacket {
 				EquipmentSlotType type = entry.getKey();
 				ItemStack stack = entry.getValue();
 				items.add(stack);
-				if (stack.getItem() != Items.AIR) {
-					this.entity.setItemStackToSlot(type, stack);
+//				if (stack.getItem() != Items.AIR) {
+				this.entity.setItemStackToSlot(type, stack);
 
-				}
+//				}
 			}
 //			EntityAccessorScreen.entity = this.entity;
-			Networking.INSTANCE.sendToServer(new ResponseEntityInventoryPacket(items, this.pos));
+			if (this.shouldRespond) {
+				Networking.INSTANCE.sendToServer(new ResponseEntityInventoryPacket(items, this.pos));
+			}
 //			TileEntity tile = mc.world.getTileEntity(this.pos);
 //			if (tile instanceof EntityAccessorTileEntity) {
 //				EntityAccessorTileEntity tileEntity = (EntityAccessorTileEntity) tile;

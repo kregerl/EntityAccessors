@@ -54,7 +54,7 @@ public abstract class AbstractAccessorBlock extends Block {
 				LivingEntity entity = AbstractAccessorTileEntity.getEntityAbove(pos, worldIn);
 
 				Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player),
-						new RequestEntityPacket(entity, pos));
+						new RequestEntityPacket(entity, pos, true));
 				((AbstractAccessorTileEntity) tileEntity).setPlayer(player);
 				((AbstractAccessorTileEntity) tileEntity).setSelectedEntity(entity);
 				return ActionResultType.SUCCESS;

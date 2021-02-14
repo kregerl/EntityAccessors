@@ -91,7 +91,7 @@ public class EntityAccessorTileEntity extends LockableLootTileEntity
 		if (this.changed && player != null) {
 			LivingEntity entity = getEntityAbove(this.pos, this.world);
 			Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player),
-					new RequestEntityPacket(entity, pos));
+					new RequestEntityPacket(entity, pos, true));
 			this.selectedEntity = entity;
 			this.changed = false;
 

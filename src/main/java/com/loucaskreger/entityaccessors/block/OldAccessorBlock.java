@@ -55,7 +55,7 @@ public class OldAccessorBlock extends Block {
 				LivingEntity entity = EntityAccessorTileEntity.getEntityAbove(pos, worldIn);
 
 				Networking.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player),
-						new RequestEntityPacket(entity, pos));
+						new RequestEntityPacket(entity, pos, true));
 				((EntityAccessorTileEntity) tileEntity).setPlayer(player);
 				return ActionResultType.SUCCESS;
 			}
